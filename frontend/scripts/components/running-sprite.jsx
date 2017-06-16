@@ -10,14 +10,27 @@ export default class RunningSprite extends React.Component {
     src: PropTypes.string.isRequired,
   }
 
+  static defaultProps = {
+    rowIndex: 0,
+    columnIndex: 1,
+  }
+
+  getUrl(props=this.props) {
+    if (props.src.indexOf('base64,') !== -1) {
+      return props.src;
+    }
+    return require('assets/images/creator/' + props.src + '.png');
+  }
+
   componentDidMount() {
-    let url = require('assets/images/creator/' + this.props.src + '.png');
-    imageLoad(url, (image) => {
+    imageLoad(this.getUrl(), (image) => {
       this.sprite = new Sprite({
         canvas: this.canvas,
         image: image,
         rows: 4,
         columns: 3,
+        rowIndex: this.props.rowIndex,
+        columnIndex: this.props.columnIndex,
         columnFrequency: 1,
       });
 
@@ -29,8 +42,7 @@ export default class RunningSprite extends React.Component {
   }
 
   componentWillReceiveProps(next) {
-    let url = require('assets/images/creator/' + next.src + '.png');
-    imageLoad(url, (image) => {
+    imageLoad(this.getUrl(next), (image) => {
       this.sprite.image = image;
     });
   }

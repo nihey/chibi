@@ -1,4 +1,21 @@
 let Utils = {
+  equals: function(a={}, b={}) {
+    // TODO: Not generic, to be refactored
+    if (['string', 'number', 'boolean', 'undefined'].indexOf(typeof a) !== -1) {
+      return a === b;
+    }
+
+    if (Object.keys(a).length !== Object.keys(b).length) {
+      return false;
+    }
+
+    return Object.keys(a).every((k) => Utils.equals(a[k], b[k]));
+  },
+
+  copy: function(data) {
+    return JSON.parse(JSON.stringify(data));
+  },
+
   getRoute: function() {
     return location.pathname.replace(/^\//g, '') || 'index';
   },
