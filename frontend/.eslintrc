@@ -3,7 +3,7 @@
     "indent": [
       2,
       2,
-      {"VariableDeclarator": {"var": 2, "let": 2, "const": 3}}
+      {"VariableDeclarator": { "var": 2, "let": 2, "const": 3}}
     ],
     "linebreak-style": [2, "unix"],
     "semi": [2, "always"],
@@ -14,14 +14,13 @@
     "browser": true
   },
   "extends": "eslint:recommended",
-  "ecmaFeatures": {
-    modules: true,
-    "experimentalObjectRestSpread": true
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module",
   },
   "globals": {
     "require": false,
     "module": true,
-    "Environment": false,
     "__dirname": false,
     "process": false
   }
