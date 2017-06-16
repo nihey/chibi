@@ -1,0 +1,10 @@
+.board {
+  padding: 20px 150px;
+  text-align: center;
+}
+
+.card {
+  cursor: pointer;
+  margin: 3px;
+  @extend .sprite;
+}

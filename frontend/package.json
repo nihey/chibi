@@ -6,7 +6,7 @@
   "scripts": {
     "production": "NODE_ENV=production npm run build",
     "build": "webpack",
-    "watch": "webpack-dev-server --inline --hot --host 0.0.0.0",
+    "watch": "webpack-dev-server --inline --host 0.0.0.0",
     "test": "eslint ."
   },
   "repository": {
@@ -32,12 +32,14 @@
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",
     "html-loader": "^0.4.5",
+    "image-load": "0.0.0",
     "img-loader": "^2.0.0",
     "json-loader": "^0.5.4",
     "node-sass": "^4.5.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "sass-loader": "^6.0.3",
+    "sprite-js": "^0.1.1",
     "webpack": "^2.4.1"
   },
   "devDependencies": {

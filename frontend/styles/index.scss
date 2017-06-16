@@ -1,0 +1,11 @@
+@import "components/running-sprite.scss";
+@import "components/board.scss";
+
+html, body, #react-root, #react-root > * {
+  margin: 0;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
