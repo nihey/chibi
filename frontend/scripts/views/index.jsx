@@ -61,8 +61,8 @@ export default class Index extends React.Component {
   }
 
   gender(gender) {
-    return (src) => {
-      let image = {front: src, back: src};
+    return (srcs) => {
+      let image = {front: srcs[0], back: srcs[0]};
       if (gender !== this.state.gender) {
         return this.setState({images: {'0': image}, gender});
       }
@@ -84,22 +84,39 @@ export default class Index extends React.Component {
   }
 
   /*
+   * General
+   */
+
+  isActive(index, front) {
+    if (!this.state.images[index]) {
+      return front === 'blank';
+    }
+    return this.state.images[index].front === front;
+  }
+
+  /*
    * Render
    */
 
   getBoard(group, gender, index, rowIndex=0) {
     return <Board>
-      <Board.Card src={'blank'} onClick={this.blank(index)}/>
+      <Board.Card
+        srcs={['blank']}
+        onClick={this.blank(index)}
+        active={this.isActive(index, 'blank')}
+      />
       {Environment[group][gender].map((e, i) => {
+        let front = group + '/' + gender + '/' + e.front;
         return <Board.Card
           key={i}
-          src={[
+          srcs={[
             e.back ? group + '/' + gender + '/' + e.back : 'blank',
             this.state.images[0].front,
             group + '/' + gender + '/' + e.front,
           ]}
           rowIndex={rowIndex}
           onClick={this.select(index)}
+          active={this.isActive(index, front)}
         />
       })}
     </Board>;
@@ -111,15 +128,16 @@ export default class Index extends React.Component {
 
   constructor(props) {
     super(props);
+    let DEFAULT = 'base/male/color-0';
     this.state = {
       gender: 'male',
       images: {
         0: {
-          front:'bases/male/color-0',
-          back:'bases/male/color-0',
+          front: DEFAULT,
+          back: DEFAULT,
         },
       },
-      sprite: 'bases/male/color-0',
+      sprite: DEFAULT,
     };
   }
 
@@ -138,8 +156,27 @@ export default class Index extends React.Component {
         />
       </div>
       <Board>
-        <Board.Card src="bases/male/color-0" onClick={this.gender('male')}/>
-        <Board.Card src="bases/female/color-0" onClick={this.gender('female')}/>
+        {Environment.base.male.map((e, i) => {
+          let front = 'base/male/' + e.front;
+          return <Board.Card
+            key={i}
+            srcs={[front]}
+            onClick={this.gender('male')}
+            images={this.state.images}
+            active={this.isActive(0, front)}
+          />;
+        })}
+        <br/>
+        {Environment.base.female.map((e, i) => {
+          let front = 'base/female/' + e.front;
+          return <Board.Card
+            key={i}
+            srcs={[front]}
+            onClick={this.gender('female')}
+            images={this.state.images}
+            active={this.isActive(0, front)}
+          />;
+        })}
       </Board>
         {this.getBoard('body', this.state.gender,  1)}
         {this.getBoard('armor', 'unissex',  2)}

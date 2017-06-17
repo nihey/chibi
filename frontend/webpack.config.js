@@ -114,6 +114,10 @@ var config = {
     extractCSS,
     new webpack.DefinePlugin({
       Environment: JSON.stringify({
+        base: {
+          male: parseDir('base/male'),
+          female: parseDir('base/female'),
+        },
         hair: {
           male: parseDir('hair/male'),
           female: parseDir('hair/female'),

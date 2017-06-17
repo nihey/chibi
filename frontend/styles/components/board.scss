@@ -1,5 +1,5 @@
 .board {
-  padding: 20px 150px;
+  padding: 20px 250px;
   text-align: center;
 }
 
@@ -9,10 +9,10 @@
   @extend .sprite;
 
   &:hover {
-    background: #3498db;
+    background: #2980b9;
   }
 
   &.active {
-    background: #2980b9;
+    background: #3498db;
   }
 }

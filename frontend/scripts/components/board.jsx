@@ -16,13 +16,8 @@ Board.Card = class Card extends React.Component {
   }
 
   getUrls(props=this.props) {
-    let srcs = props.src;
-    if (!Array.isArray(srcs)) {
-      srcs = [srcs];
-    }
-
-    return srcs.map((src) => {
-      if (props.src.indexOf('base64,') !== -1) {
+    return props.srcs.map((src) => {
+      if (src.indexOf('base64,') !== -1) {
         return src;
       }
       return require('assets/images/creator/' + src + '.png');
@@ -73,8 +68,8 @@ Board.Card = class Card extends React.Component {
 
   render() {
     return <canvas
-      className="card"
-      onClick={() => this.props.onClick(this.props.src)}
+      className={"card " + (this.props.active ? 'active' : '')}
+      onClick={() => this.props.onClick(this.props.srcs)}
       ref={v => this.canvas = v}
       width="32"
       height="32"
