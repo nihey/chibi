@@ -1,7 +1,9 @@
 .running-sprite-container {
   position: fixed;
-  left: 10px;
+  left: 0px;
   top: 10px;
+  width: $global-left-margin;
+  text-align: center;
 }
 
 .sprite {

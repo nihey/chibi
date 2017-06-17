@@ -4,6 +4,7 @@ import imageLoad from 'image-load';
 
 import Utils from 'utils';
 import RunningSprite from 'components/running-sprite';
+import Tools from 'components/tools';
 import Board from 'components/board';
 
 
@@ -138,6 +139,7 @@ export default class Index extends React.Component {
         },
       },
       sprite: DEFAULT,
+      name: Utils.getRandomName(),
     };
   }
 
@@ -154,6 +156,7 @@ export default class Index extends React.Component {
           srcs={this.state.images}
           onChange={(sprite) => this.setState({sprite})}
         />
+        <Tools sprite={this.state.sprite}/>
       </div>
       <Board>
         {Environment.base.male.map((e, i) => {

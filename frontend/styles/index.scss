@@ -1,3 +1,5 @@
+$global-left-margin: 250px;
+
 @import "components/running-sprite.scss";
 @import "components/board.scss";
 
@@ -8,4 +10,31 @@ html, body, #react-root, #react-root > * {
 
 * {
   box-sizing: border-box;
+}
+
+.tools > * {
+  display: inline-block;
+  margin: 5px 0;
+}
+
+input {
+  padding: 5px;
+  text-align: center;
+  font-size: 0.85em;
+  width: 90%;
+  border-radius: 3px;
+  border: 1px solid #2c3e50;
+}
+
+button, .button {
+  text-decoration: none;
+  cursor: pointer;
+  font-family: sans-serif;
+  font-size: 0.85em;
+  padding: 6px;
+  border-radius: 3px;
+  background: #2c3e50;
+  color: #ecf0f1;
+  border: none;
+  box-shadow: 1px 1px 1px #cfcfcf;
 }

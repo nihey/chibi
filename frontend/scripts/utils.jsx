@@ -1,4 +1,14 @@
+import Config from 'config';
+
 let Utils = {
+  getRandomName() {
+    let names = Config.names
+    let first = names.first[Math.floor(Math.random() * names.first.length)];
+    let middle = names.sur[Math.floor(Math.random() * names.sur.length)];
+    let last = names.sur[Math.floor(Math.random() * names.sur.length)];
+    return `${first} ${middle} ${last}`.replace(/ /g, '_');
+  },
+
   equals: function(a={}, b={}) {
     // TODO: Not generic, to be refactored
     if (['string', 'number', 'boolean', 'undefined'].indexOf(typeof a) !== -1) {
