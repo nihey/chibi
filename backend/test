@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+import unittest
+
+from project.app import api
+from project.utils import get_subclasses
+from project.api.base import BaseResource
+from project.test.base import BaseTestCase, database_test
+from project.api.decorators import rest_resource
+
+
+if __name__ == '__main__':
+    loader = unittest.TestSuite()
+
+    # Register all REST endpoints
+    for cls in get_subclasses('project', BaseResource):
+        if cls.route is not None:
+            api.add_resource(rest_resource(cls), cls.route)
+
+    for klass in get_subclasses('project', BaseTestCase):
+        for attr in [a for a in dir(klass) if a.startswith('test_')]:
+            setattr(klass, attr, database_test(getattr(klass, attr)))
+            loader.addTest(klass(attr))
+    unittest.TextTestRunner(verbosity=3).run(loader)

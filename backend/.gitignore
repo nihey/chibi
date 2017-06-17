@@ -1,0 +1,19 @@
+#
+# Backend
+#
+
+# Server built files
+*.pyc
+
+# Test files
+.coverage
+.noseids
+
+# Server dependencies
+env
+venv
+node_modules
+
+# Local settings
+project/localconfig.py
+deploy_config.py

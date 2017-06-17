@@ -1,5 +1,7 @@
 import Config from 'config';
 
+import $ from 'jquery';
+
 let Utils = {
   getRandomName() {
     let names = Config.names
@@ -55,6 +57,17 @@ let Utils = {
     }
 
     return params;
+  },
+
+  ajax: function(options) {
+    options.url = Config.API_URL + options.url;
+    options.crossDomain = true;
+    if (options.method === 'POST') {
+      options.data = JSON.stringify(options.data);
+      options.contentType = 'application/json';
+      options.dataType = 'json';
+    }
+    $.ajax(options);
   },
 };
 

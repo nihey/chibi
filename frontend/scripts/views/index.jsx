@@ -68,7 +68,7 @@ export default class Index extends React.Component {
         return this.setState({images: {'0': image}, gender});
       }
       this.state.images[0] = image;
-      this.setState({images: this.state.images, gender});
+      this.setState({images: this.state.images, gender}, this.save);
     };
   }
 
@@ -80,13 +80,31 @@ export default class Index extends React.Component {
       };
 
       this.state.images[level] = image;
-      this.setState({images: this.state.images});
+      this.setState({images: this.state.images}, this.save);
     };
   }
 
   /*
    * General
    */
+
+  restore() {
+    let DEFAULT = 'base/male/color-0';
+    return JSON.parse(localStorage.__savedIndexState_v0 || JSON.stringify({
+      gender: 'male',
+      images: {
+        0: {
+          front: DEFAULT,
+          back: DEFAULT,
+        },
+      },
+      sprite: DEFAULT,
+    }));
+  }
+
+  save() {
+    localStorage.__savedIndexState_v0 = JSON.stringify(this.state);
+  }
 
   isActive(index, front) {
     if (!this.state.images[index]) {
@@ -129,18 +147,7 @@ export default class Index extends React.Component {
 
   constructor(props) {
     super(props);
-    let DEFAULT = 'base/male/color-0';
-    this.state = {
-      gender: 'male',
-      images: {
-        0: {
-          front: DEFAULT,
-          back: DEFAULT,
-        },
-      },
-      sprite: DEFAULT,
-      name: Utils.getRandomName(),
-    };
+    this.state = this.restore();
   }
 
   render() {
@@ -156,7 +163,7 @@ export default class Index extends React.Component {
           srcs={this.state.images}
           onChange={(sprite) => this.setState({sprite})}
         />
-        <Tools sprite={this.state.sprite}/>
+        <Tools images={this.state.images} sprite={this.state.sprite} gender={this.state.gender}/>
       </div>
       <Board>
         {Environment.base.male.map((e, i) => {

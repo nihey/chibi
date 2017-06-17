@@ -1,8 +1,20 @@
 import React from 'react';
 
 export default class Router extends React.Component {
+  routes = [
+    ['sprite', 'p/(.*)'],
+  ]
+
   getView() {
-    return require('views/' + this.state.route).default;
+    var route = this.state.route;
+    this.routes.some(function(tuple) {
+      let [alias, expression] = tuple;
+      if (route.match(new RegExp(expression))) {
+        route = alias;
+        return true;
+      }
+    }, this);
+    return require('views/' + route).default;
   }
 
   constructor(props) {
@@ -20,6 +32,8 @@ export default class Router extends React.Component {
 
   render() {
     let View = this.getView();
-    return <View/>;
+    return <div>
+      <View/>
+    </div>;
   }
 }
