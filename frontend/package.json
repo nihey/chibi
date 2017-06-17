@@ -31,6 +31,7 @@
     "css-loader": "^0.28.0",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",
+    "graceful-fs": "^4.1.11",
     "html-loader": "^0.4.5",
     "image-load": "0.0.0",
     "img-loader": "^2.0.0",

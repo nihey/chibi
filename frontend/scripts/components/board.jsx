@@ -10,46 +10,64 @@ class Board extends React.Component {
 }
 
 Board.Card = class Card extends React.Component {
-  static propTypes = {
-    src: PropTypes.string.isRequired,
-  }
-
   static defaultProps = {
     rowIndex: 0,
     columnIndex: 1,
   }
 
-  getUrl(props=this.props) {
-    if (props.src.indexOf('base64,') !== -1) {
-      return props.src;
+  getUrls(props=this.props) {
+    let srcs = props.src;
+    if (!Array.isArray(srcs)) {
+      srcs = [srcs];
     }
-    return require('assets/images/creator/' + props.src + '.png');
+
+    return srcs.map((src) => {
+      if (props.src.indexOf('base64,') !== -1) {
+        return src;
+      }
+      return require('assets/images/creator/' + src + '.png');
+    });
   }
 
   componentDidMount() {
-    imageLoad(this.getUrl(), (image) => {
-      this.sprite = new Sprite({
-        canvas: this.canvas,
-        image: image,
-        rows: 4,
-        columns: 3,
-        rowIndex: this.props.rowIndex,
-        columnIndex: this.props.columnIndex,
-        columnFrequency: 0,
-      });
+    this.sprites = [];
+    imageLoad(this.getUrls(), (...images) => {
+      images.forEach((image, i) => {
+        if (i === 0) {
+          image.style.opacity = 0;
+        }
 
-      this.sprite.draw(0, 0);
+        let sprite = new Sprite({
+          canvas: this.canvas,
+          image: image,
+          rows: 4,
+          columns: 3,
+          rowIndex: this.props.rowIndex,
+          columnIndex: this.props.columnIndex,
+          columnFrequency: 0,
+        });
+
+        sprite.draw(0, 0);
+        this.sprites.push(sprite);
+      });
     });
   }
 
   componentWillReceiveProps(next) {
-    if (!this.sprite) {
+    if (!this.sprites || this.sprites.length === 0) {
       return;
     }
 
-    imageLoad(this.getUrl(next), (image) => {
-      this.sprite.image = image;
-      this.sprite.draw(0, 0);
+    imageLoad(this.getUrls(next), (...images) => {
+      this.canvas.getContext('2d').clearRect(0, 0, this.canvas.width, this.canvas.height);
+      images.forEach((image, i) => {
+        if (i === 0) {
+          image.style.opacity = 0;
+        }
+
+        this.sprites[i].image = image;
+        this.sprites[i].draw(0, 0);
+      });
     });
   }
 

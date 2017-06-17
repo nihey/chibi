@@ -1,5 +1,8 @@
-var path = require('path');
 var fs = require('fs');
+var gracefulFs = require('graceful-fs');
+gracefulFs.gracefulify(fs);
+
+var path = require('path');
 var webpack = require('webpack');
 
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -71,7 +74,7 @@ var config = {
         use: [{
           loader: 'file-loader',
           query: {useRelativePath: false},
-        }, 'img-loader'],
+        }],
       },
       {
         test: /\.(ttf.*|eot.*|woff.*|ogg|mp3)$/,
@@ -88,17 +91,32 @@ var config = {
     extractCSS,
     new webpack.DefinePlugin({
       Environment: JSON.stringify({
-        hairs: {
+        hair: {
           male: fs.readdirSync('assets/images/creator/hair/male').map(f => f.split('.')[0]),
           female: fs.readdirSync('assets/images/creator/hair/female').map(f => f.split('.')[0]),
         },
-        hairFronts: {
+        'hair-front': {
           male: fs.readdirSync('assets/images/creator/hair-front/male').map(f => f.split('.')[0]),
           female: fs.readdirSync('assets/images/creator/hair-front/female').map(f => f.split('.')[0]),
         },
-        hairBacks: {
+        'hair-back': {
           male: fs.readdirSync('assets/images/creator/hair-back/male').map(f => f.split('.')[0]),
           female: fs.readdirSync('assets/images/creator/hair-back/female').map(f => f.split('.')[0]),
+        },
+        body: {
+          male: fs.readdirSync('assets/images/creator/body/male').map(f => f.split('.')[0]),
+          female: fs.readdirSync('assets/images/creator/body/female').map(f => f.split('.')[0]),
+        },
+        accessory: {
+          unissex: fs.readdirSync('assets/images/creator/accessory/unissex').map(f => f.split('.')[0]),
+          male: fs.readdirSync('assets/images/creator/accessory/male').map(f => f.split('.')[0]),
+          female: fs.readdirSync('assets/images/creator/accessory/female').map(f => f.split('.')[0]),
+        },
+        mantle: {
+          unissex: fs.readdirSync('assets/images/creator/mantle/unissex').map(f => f.split('.')[0]),
+        },
+        wing: {
+          unissex: fs.readdirSync('assets/images/creator/wing/unissex').map(f => f.split('.')[0]),
         },
       }),
     }),
