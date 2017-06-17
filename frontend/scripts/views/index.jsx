@@ -10,7 +10,7 @@ import Board from 'components/board';
 class Accumulator extends React.Component {
   process(props=this.props, forced) {
     let srcs = Object.keys(props.srcs).sort();
-    let urls = srcs.map(k => require('assets/images/creator/' + props.srcs[k].src + '.png'));
+    let urls = srcs.map(k => require('assets/images/creator/' + props.srcs[k] + '.png'));
 
     if (!forced && Utils.equals(props.srcs, this.srcs)) {
       return;
@@ -22,17 +22,6 @@ class Accumulator extends React.Component {
 
       srcs.forEach((k, i) => {
         let src = props.srcs[k];
-        if (src.type === 'quarter-mixed') {
-          context.drawImage(images[i], 0, 0, 96, 32, 0, 0, 96, 32);
-        }
-      });
-
-      srcs.forEach((k, i) => {
-        let src = props.srcs[k];
-        if (src.type === 'quarter-mixed') {
-          context.drawImage(images[i], 0, 32, 96, 96, 0, 32, 96, 96);
-          return;
-        }
         context.drawImage(images[i], 0, 0);
       });
 
@@ -65,24 +54,29 @@ export default class Index extends React.Component {
 
   blank(level) {
     return () => {
-      delete this.state.images[level]
+      delete this.state.images[level];
+      delete this.state.images[level - 100];
       this.setState({images: this.state.images});
     };
   }
 
-  select(level, type="fixed", gender) {
+  select(level, gender) {
     gender = gender || this.state.gender
     return (src) => {
-      // In most cases, the src we want to get is the last one
-      if (Array.isArray(src)) {
-        src = src[src.length - 1];
+      if (!Array.isArray(src)) {
+        src = [src];
       }
 
+      if (src.length === 3) {
+        this.state.images[level - 100] = src[0];
+      }
+
+      src = src[src.length - 1];
       if (this.state.gender === gender) {
-        this.state.images[level] = {src, type};
+        this.state.images[level] = src;
       } else {
         let images = {};
-        images[level] = {src, type}
+        images[level] = src
         this.state.images = images;
       }
       this.setState({images: this.state.images, gender});
@@ -97,7 +91,7 @@ export default class Index extends React.Component {
     super(props);
     this.state = {
       gender: 'male',
-      images: {0: {src: 'bases/male/color-0'}},
+      images: {0: 'bases/male/color-0'},
       sprite: 'bases/male/color-0',
     };
   }
@@ -117,8 +111,8 @@ export default class Index extends React.Component {
         />
       </div>
       <Board>
-        <Board.Card src="bases/male/color-0" onClick={this.select(0, 'fixed', 'male')}/>
-        <Board.Card src="bases/female/color-0" onClick={this.select(0, 'fixed', 'female')}/>
+        <Board.Card src="bases/male/color-0" onClick={this.select(0, 'male')}/>
+        <Board.Card src="bases/female/color-0" onClick={this.select(0, 'female')}/>
       </Board>
         {['body', 'hair', 'accessory', 'hair-back', 'hair-front'].map((g, i) => {
           return <Board key={i}>
@@ -132,15 +126,29 @@ export default class Index extends React.Component {
               return <Board.Card
                 key={i + '-' + j}
                 src={[
+                  e.back ? g + '/' + this.state.gender + '/' + e.back : null,
                   `bases/${this.state.gender}/color-0`,
-                  g + '/' + this.state.gender + '/' + e,
-                ]}
+                  g + '/' + this.state.gender + '/' + e.front,
+                ].filter(u => u)}
                 rowIndex={rowIndex}
-                onClick={this.select(i + 1, g === 'hair-back' ? 'quarter-mixed' : 'fixed')}
+                onClick={this.select(i + 1)}
               />
             })}
           </Board>;
         })}
+        <Board>
+          <Board.Card src={'blank'} onClick={this.blank(19)}/>
+          {Environment.armor.unissex.map((e, i) => {
+            return <Board.Card
+              key={i}
+              src={[
+                `bases/${this.state.gender}/color-0`,
+                'armor/unissex/' + e.front,
+              ]}
+              onClick={this.select(19)}
+            />
+          })}
+        </Board>;
         <Board>
           <Board.Card src={'blank'} onClick={this.blank(20)}/>
           {Environment.accessory.unissex.map((e, i) => {
@@ -148,7 +156,7 @@ export default class Index extends React.Component {
               key={i}
               src={[
                 `bases/${this.state.gender}/color-0`,
-                'accessory/unissex/' + e
+                'accessory/unissex/' + e.front,
               ]}
               onClick={this.select(20)}
             />
@@ -159,7 +167,11 @@ export default class Index extends React.Component {
           {Environment.mantle.unissex.map((e, i) => {
             return <Board.Card
               key={i}
-              src={'mantle/unissex/' + e}
+              src={[
+                'mantle/unissex/' + e.back,
+                `bases/${this.state.gender}/color-0`,
+                'mantle/unissex/' + e.front,
+              ]}
               onClick={this.select(21)}
             />
           })}
@@ -170,10 +182,11 @@ export default class Index extends React.Component {
             return <Board.Card
               key={i}
               src={[
+                'wing/unissex/' + e.back,
                 `bases/${this.state.gender}/color-0`,
-                'wing/unissex/' + e
+                'wing/unissex/' + e.front,
               ]}
-              onClick={this.select(22, 'quarter-mixed')}
+              onClick={this.select(22)}
               rowIndex={3}
             />
           })}

@@ -9,6 +9,29 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var extractHTML = new ExtractTextPlugin('index.html');
 var extractCSS = new ExtractTextPlugin('style.css');
 
+let readDir = function(dirPath) {
+  return fs.readdirSync('assets/images/creator/' + dirPath).map(f => f.split('.')[0]);
+};
+
+let parseDir = function(dirPath) {
+  files = readDir(dirPath);
+  let parsed = {};
+  files.forEach(function(file) {
+    let key = file.replace(/_back|_front/g, '');
+    parsed[key] = parsed[key] || {};
+
+    // Back part
+    if (file.match(/_back/)) {
+      parsed[key].back = file;
+      return;
+    }
+
+    parsed[key].front = file;
+  });
+
+  return Object.keys(parsed).map(k => parsed[k]);
+};
+
 var config = {
   devServer: {
     port: 8000,
@@ -92,31 +115,34 @@ var config = {
     new webpack.DefinePlugin({
       Environment: JSON.stringify({
         hair: {
-          male: fs.readdirSync('assets/images/creator/hair/male').map(f => f.split('.')[0]),
-          female: fs.readdirSync('assets/images/creator/hair/female').map(f => f.split('.')[0]),
+          male: parseDir('hair/male'),
+          female: parseDir('hair/female'),
         },
         'hair-front': {
-          male: fs.readdirSync('assets/images/creator/hair-front/male').map(f => f.split('.')[0]),
-          female: fs.readdirSync('assets/images/creator/hair-front/female').map(f => f.split('.')[0]),
+          male: parseDir('hair-front/male'),
+          female: parseDir('hair-front/female'),
         },
         'hair-back': {
-          male: fs.readdirSync('assets/images/creator/hair-back/male').map(f => f.split('.')[0]),
-          female: fs.readdirSync('assets/images/creator/hair-back/female').map(f => f.split('.')[0]),
+          male: parseDir('hair-back/male'),
+          female: parseDir('hair-back/female'),
         },
         body: {
-          male: fs.readdirSync('assets/images/creator/body/male').map(f => f.split('.')[0]),
-          female: fs.readdirSync('assets/images/creator/body/female').map(f => f.split('.')[0]),
+          male: parseDir('body/male'),
+          female: parseDir('body/female'),
+        },
+        armor: {
+          unissex: parseDir('armor/unissex'),
         },
         accessory: {
-          unissex: fs.readdirSync('assets/images/creator/accessory/unissex').map(f => f.split('.')[0]),
-          male: fs.readdirSync('assets/images/creator/accessory/male').map(f => f.split('.')[0]),
-          female: fs.readdirSync('assets/images/creator/accessory/female').map(f => f.split('.')[0]),
+          unissex: parseDir('accessory/unissex'),
+          male: parseDir('accessory/male'),
+          female: parseDir('accessory/female'),
         },
         mantle: {
-          unissex: fs.readdirSync('assets/images/creator/mantle/unissex').map(f => f.split('.')[0]),
+          unissex: parseDir('mantle/unissex'),
         },
         wing: {
-          unissex: fs.readdirSync('assets/images/creator/wing/unissex').map(f => f.split('.')[0]),
+          unissex: parseDir('wing/unissex'),
         },
       }),
     }),
