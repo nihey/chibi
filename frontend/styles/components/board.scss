@@ -5,5 +5,14 @@
 
 .card {
   cursor: pointer;
+  transition: background 0.3s ease-out;
   @extend .sprite;
+
+  &:hover {
+    background: #3498db;
+  }
+
+  &.active {
+    background: #2980b9;
+  }
 }

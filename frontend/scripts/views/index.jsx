@@ -10,7 +10,9 @@ import Board from 'components/board';
 class Accumulator extends React.Component {
   process(props=this.props, forced) {
     let srcs = Object.keys(props.srcs).sort();
-    let urls = srcs.map(k => require('assets/images/creator/' + props.srcs[k] + '.png'));
+    let backs = srcs.map(k => require('assets/images/creator/' + props.srcs[k].back + '.png'));
+    let fronts = srcs.map(k => require('assets/images/creator/' + props.srcs[k].front + '.png'));
+    let urls = backs.concat(fronts);
 
     if (!forced && Utils.equals(props.srcs, this.srcs)) {
       return;
@@ -20,9 +22,8 @@ class Accumulator extends React.Component {
       let context = this.canvas.getContext('2d');
       context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      srcs.forEach((k, i) => {
-        let src = props.srcs[k];
-        context.drawImage(images[i], 0, 0);
+      images.forEach((image) => {
+        context.drawImage(image, 0, 0);
       });
 
       this.srcs = Utils.copy(props.srcs);
@@ -55,32 +56,53 @@ export default class Index extends React.Component {
   blank(level) {
     return () => {
       delete this.state.images[level];
-      delete this.state.images[level - 100];
       this.setState({images: this.state.images});
     };
   }
 
-  select(level, gender) {
-    gender = gender || this.state.gender
+  gender(gender) {
     return (src) => {
-      if (!Array.isArray(src)) {
-        src = [src];
+      let image = {front: src, back: src};
+      if (gender !== this.state.gender) {
+        return this.setState({images: {'0': image}, gender});
       }
-
-      if (src.length === 3) {
-        this.state.images[level - 100] = src[0];
-      }
-
-      src = src[src.length - 1];
-      if (this.state.gender === gender) {
-        this.state.images[level] = src;
-      } else {
-        let images = {};
-        images[level] = src
-        this.state.images = images;
-      }
+      this.state.images[0] = image;
       this.setState({images: this.state.images, gender});
     };
+  }
+
+  select(level) {
+    return (srcs) => {
+      let image = {
+        back: srcs[0],
+        front: srcs[srcs.length - 1],
+      };
+
+      this.state.images[level] = image;
+      this.setState({images: this.state.images});
+    };
+  }
+
+  /*
+   * Render
+   */
+
+  getBoard(group, gender, index, rowIndex=0) {
+    return <Board>
+      <Board.Card src={'blank'} onClick={this.blank(index)}/>
+      {Environment[group][gender].map((e, i) => {
+        return <Board.Card
+          key={i}
+          src={[
+            e.back ? group + '/' + gender + '/' + e.back : 'blank',
+            this.state.images[0].front,
+            group + '/' + gender + '/' + e.front,
+          ]}
+          rowIndex={rowIndex}
+          onClick={this.select(index)}
+        />
+      })}
+    </Board>;
   }
 
   /*
@@ -91,7 +113,12 @@ export default class Index extends React.Component {
     super(props);
     this.state = {
       gender: 'male',
-      images: {0: 'bases/male/color-0'},
+      images: {
+        0: {
+          front:'bases/male/color-0',
+          back:'bases/male/color-0',
+        },
+      },
       sprite: 'bases/male/color-0',
     };
   }
@@ -111,86 +138,18 @@ export default class Index extends React.Component {
         />
       </div>
       <Board>
-        <Board.Card src="bases/male/color-0" onClick={this.select(0, 'male')}/>
-        <Board.Card src="bases/female/color-0" onClick={this.select(0, 'female')}/>
+        <Board.Card src="bases/male/color-0" onClick={this.gender('male')}/>
+        <Board.Card src="bases/female/color-0" onClick={this.gender('female')}/>
       </Board>
-        {['body', 'hair', 'accessory', 'hair-back', 'hair-front'].map((g, i) => {
-          return <Board key={i}>
-            <Board.Card src={'blank'} onClick={this.blank(i + 1)}/>
-            {Environment[g][this.state.gender].map((e, j) => {
-              let rowIndex = 0;
-              if (g === 'hair-back') {
-                rowIndex = 3;
-              }
-
-              return <Board.Card
-                key={i + '-' + j}
-                src={[
-                  e.back ? g + '/' + this.state.gender + '/' + e.back : null,
-                  `bases/${this.state.gender}/color-0`,
-                  g + '/' + this.state.gender + '/' + e.front,
-                ].filter(u => u)}
-                rowIndex={rowIndex}
-                onClick={this.select(i + 1)}
-              />
-            })}
-          </Board>;
-        })}
-        <Board>
-          <Board.Card src={'blank'} onClick={this.blank(19)}/>
-          {Environment.armor.unissex.map((e, i) => {
-            return <Board.Card
-              key={i}
-              src={[
-                `bases/${this.state.gender}/color-0`,
-                'armor/unissex/' + e.front,
-              ]}
-              onClick={this.select(19)}
-            />
-          })}
-        </Board>;
-        <Board>
-          <Board.Card src={'blank'} onClick={this.blank(20)}/>
-          {Environment.accessory.unissex.map((e, i) => {
-            return <Board.Card
-              key={i}
-              src={[
-                `bases/${this.state.gender}/color-0`,
-                'accessory/unissex/' + e.front,
-              ]}
-              onClick={this.select(20)}
-            />
-          })}
-        </Board>;
-        <Board>
-          <Board.Card src={'blank'} onClick={this.blank(21)}/>
-          {Environment.mantle.unissex.map((e, i) => {
-            return <Board.Card
-              key={i}
-              src={[
-                'mantle/unissex/' + e.back,
-                `bases/${this.state.gender}/color-0`,
-                'mantle/unissex/' + e.front,
-              ]}
-              onClick={this.select(21)}
-            />
-          })}
-        </Board>;
-        <Board>
-          <Board.Card src={'blank'} onClick={this.blank(22)}/>
-          {Environment.wing.unissex.map((e, i) => {
-            return <Board.Card
-              key={i}
-              src={[
-                'wing/unissex/' + e.back,
-                `bases/${this.state.gender}/color-0`,
-                'wing/unissex/' + e.front,
-              ]}
-              onClick={this.select(22)}
-              rowIndex={3}
-            />
-          })}
-        </Board>;
+        {this.getBoard('body', this.state.gender,  1)}
+        {this.getBoard('armor', 'unissex',  2)}
+        {this.getBoard('hair', this.state.gender,  3)}
+        {this.getBoard('accessory', this.state.gender,  4)}
+        {this.getBoard('hair-back', this.state.gender,  5, 3)}
+        {this.getBoard('hair-front', this.state.gender,  6)}
+        {this.getBoard('accessory', 'unissex',  7)}
+        {this.getBoard('mantle', 'unissex',  8)}
+        {this.getBoard('wing', 'unissex',  9, 3)}
     </div>;
   }
 }

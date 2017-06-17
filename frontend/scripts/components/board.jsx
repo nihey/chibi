@@ -33,8 +33,8 @@ Board.Card = class Card extends React.Component {
     this.sprites = [];
     imageLoad(this.getUrls(), (...images) => {
       images.forEach((image, i) => {
-        if (i === 0) {
-          image.style.opacity = 0;
+        if (!this.canvas) {
+          return;
         }
 
         let sprite = new Sprite({
