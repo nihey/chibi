@@ -4,6 +4,7 @@ import IPython
 
 from project.app import app, mongo
 from project.collections.user import *
+from project.collections.sprite import *
 
 
 with app.app_context():

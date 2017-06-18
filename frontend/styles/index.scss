@@ -3,6 +3,7 @@ $global-left-margin: 250px;
 @import "../node_modules/font-awesome/css/font-awesome.css";
 @import url('https://fonts.googleapis.com/css?family=Indie+Flower');
 
+@import "components/header.scss";
 @import "components/running-sprite.scss";
 @import "components/board.scss";
 @import "components/tools.scss";
@@ -37,6 +38,12 @@ button, .button {
   color: #ecf0f1;
   border: none;
   box-shadow: 1px 1px 1px #cfcfcf;
+  outline: none;
+  transition: background 0.3s ease-out;
+
+  &:hover {
+    background: #16a085;
+  }
 }
 
 .flex-center {
@@ -52,5 +59,29 @@ button, .button {
 
   > * {
     display: inline-block;
+  }
+}
+
+.upvote-section {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+
+  > * {
+    margin: 5px;
+  }
+}
+
+.arrow-button {
+  padding: 0;
+  background: none !important;
+  box-shadow: none;
+  color: #2c3e50;
+  font-size: 20px;
+
+  &.active {
+    background: none !important;
+    color: #16a085;
   }
 }

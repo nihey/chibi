@@ -3,13 +3,17 @@ import json
 from datetime import datetime
 from inspect import isclass
 
-from flask import Response, session
+from flask import Response, session, request
 from bson.objectid import ObjectId
 
 
 def log(*args):
     string = ' '.join([unicode(a).encode('utf-8') for a in args])
     print(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '-', string)
+
+
+def get_ip():
+    return request.remote_addr
 
 
 def json_response(dict_, code=200):

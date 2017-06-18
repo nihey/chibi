@@ -71,6 +71,10 @@ class BaseCollection(object):
         return mongo.db[cls.__collection__].remove(*args, **kwargs)
 
     @classmethod
+    def group(cls, *args, **kwargs):
+        return mongo.db[cls.__collection__].group(*args, **kwargs)
+
+    @classmethod
     def get_or_create(cls, **attrs):
         # Will cause a KeyError if a key is missing
         keys = {key: attrs[key] for key in cls.__collection_keys__[0]}

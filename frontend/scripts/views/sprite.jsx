@@ -1,22 +1,10 @@
 import React from 'react';
 
-import RunningSprite from 'components/running-sprite';
+import Header from 'components/header';
+import SpriteDetails from 'components/sprite-details';
 import Utils from 'utils';
 
-export default class SpriteView extends React.Component {
-  onEdit() {
-    localStorage.__savedIndexState_v0 = JSON.stringify({
-      gender: this.state.data.gender,
-      images: this.state.data.setting,
-      sprite: this.state.data.image,
-    });
-    localStorage.__savedToolsState_v0 = JSON.stringify({
-      id: this.state.data.id,
-      name: this.state.data.name,
-    });
-    Utils.setRoute('/');
-  }
-
+export default class SpriteDetailsView extends React.Component {
   update(props=this.props) {
     Utils.ajax({
       method: 'GET',
@@ -28,6 +16,10 @@ export default class SpriteView extends React.Component {
       error: () => Utils.setRoute('/'),
     });
   }
+
+  /*
+   * React
+   */
 
   componentDidMount() {
     this.update();
@@ -44,27 +36,8 @@ export default class SpriteView extends React.Component {
     }
 
     return <div className="flex-center">
-      <h1>{ this.state.data.name }</h1>
-      <div>
-        <RunningSprite src={this.state.data.image}/>
-        <RunningSprite src={this.state.data.image} rowIndex={1}/>
-        <br/>
-        <RunningSprite src={this.state.data.image} rowIndex={2}/>
-        <RunningSprite src={this.state.data.image} rowIndex={3}/>
-        <br/>
-      </div>
-      <img src={this.state.data.image}/>
-      <a
-        className="button"
-        href={this.state.data.image}
-        download={this.state.data.name}
-        style={{width: '96px', marginTop: '10px'}}
-      >
-        download
-      </a>
-      <button style={{width: '96px', marginTop: '10px'}} onClick={this.onEdit.bind(this)}>
-        edit
-      </button>
+      <Header/>
+      <SpriteDetails data={this.state.data}/>
     </div>;
   }
 }

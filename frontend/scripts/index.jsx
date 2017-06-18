@@ -5,6 +5,7 @@ window.gEvents = new EventListener();
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import $ from 'jquery';
 
 import Router from 'components/router';
 
@@ -12,6 +13,14 @@ import Router from 'components/router';
 window.onpopstate = function() {
   window.gEvents.trigger('route-changed', Utils.getRoute());
 };
+
+$(document).on('click', 'a', function(e) {
+  let a = e.target
+  if (a.getAttribute('target') !== '_blank' && a.getAttribute('href')[0] === '/') {
+    e.preventDefault();
+    Utils.setRoute(e.target.href);
+  }
+});
 
 ReactDOM.render(<Router/>, document.getElementById('react-root'));
 if (module.hot) {
