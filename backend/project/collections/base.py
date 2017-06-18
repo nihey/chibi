@@ -8,6 +8,9 @@ from project.app import mongo
 
 class BaseCollection(object):
 
+    ASCENDING = pymongo.ASCENDING
+    DESCENDING = pymongo.DESCENDING
+
     #: Sets __collection__ property in a dynamic way
     class __metaclass__(type):
         #: The name of the collection (like the name of the table)
@@ -73,6 +76,10 @@ class BaseCollection(object):
     @classmethod
     def group(cls, *args, **kwargs):
         return mongo.db[cls.__collection__].group(*args, **kwargs)
+
+    @classmethod
+    def aggregate(cls, *args, **kwargs):
+        return mongo.db[cls.__collection__].aggregate(*args, **kwargs)
 
     @classmethod
     def get_or_create(cls, **attrs):

@@ -1,0 +1,13 @@
+.gallery {
+  padding: 0px 250px;
+  min-height: 100%;
+  text-align: center;
+}
+
+.gallery-routes {
+  > * {
+    display: inline-block;
+    margin: 10px;
+    width: 50px;
+  }
+}

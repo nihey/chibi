@@ -23,7 +23,7 @@ export default class SpriteDetails extends React.Component {
         method: 'POST',
         url: '/sprite-vote',
         data: {
-          id: Utils.getRoute().split('/')[1],
+          id: this.state.data.id,
           vote,
         },
         success: (data) => {
@@ -66,7 +66,7 @@ export default class SpriteDetails extends React.Component {
       return <div/>;
     }
 
-    return <div className="flex-center">
+    return <div className="flex-center" style={this.props.style}>
       <h1>{ this.state.data.name }</h1>
       <div className="upvote-section">
         <button style={{marginBottom: '-13px'}} {...this.getVoteProps(1)}>

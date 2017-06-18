@@ -7,6 +7,7 @@ $global-left-margin: 250px;
 @import "components/running-sprite.scss";
 @import "components/board.scss";
 @import "components/tools.scss";
+@import "views/gallery.scss";
 
 html, body, #react-root, #react-root > * {
   margin: 0;
@@ -41,7 +42,7 @@ button, .button {
   outline: none;
   transition: background 0.3s ease-out;
 
-  &:hover {
+  &:hover, &.active {
     background: #16a085;
   }
 }
@@ -74,7 +75,6 @@ button, .button {
 }
 
 .arrow-button {
-  padding: 0;
   background: none !important;
   box-shadow: none;
   color: #2c3e50;

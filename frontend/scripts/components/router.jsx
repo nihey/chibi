@@ -3,6 +3,8 @@ import React from 'react';
 export default class Router extends React.Component {
   routes = [
     ['sprite', 'p/(.*)'],
+    ['gallery', 'gallery/(new|top)'],
+    ['index', '(.*)'],
   ]
 
   getView() {
@@ -33,7 +35,7 @@ export default class Router extends React.Component {
   render() {
     let View = this.getView();
     return <div>
-      <View/>
+      <View route={this.state.route}/>
     </div>;
   }
 }

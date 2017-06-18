@@ -165,6 +165,9 @@ export default class Index extends React.Component {
         />
         <Tools images={this.state.images} sprite={this.state.sprite} gender={this.state.gender}/>
       </div>
+      <div className="right-sidebar">
+        <a className="button" href="/gallery/top">gallery</a>
+      </div>
       <Board>
         {Environment.base.male.map((e, i) => {
           let front = 'base/male/' + e.front;

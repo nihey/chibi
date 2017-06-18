@@ -6,6 +6,19 @@
   text-align: center;
 }
 
+.right-sidebar {
+  position: fixed;
+  right: 0px;
+  top: 50px;
+  width: $global-left-margin;
+  text-align: center;
+
+  > * {
+    display: inline-block;
+    width: 60%;
+  }
+}
+
 .sprite {
   margin: 3px;
   padding: 4px;
