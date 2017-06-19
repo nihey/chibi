@@ -973,5 +973,5 @@ export default {
       "le Senechal",
       "le Vicomte",
     ],
-  }
+  },
 };

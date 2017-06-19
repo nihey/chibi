@@ -127,7 +127,7 @@ export default class Index extends React.Component {
       {Environment[group][gender].map((e, i) => {
         let front = group + '/' + gender + '/' + e.front;
         return <Board.Card
-          key={i}
+          key={e.back + this.state.images[0].front + e.front}
           srcs={[
             e.back ? group + '/' + gender + '/' + e.back : 'blank',
             this.state.images[0].front,

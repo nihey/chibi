@@ -7,6 +7,7 @@ $global-left-margin: 250px;
 @import "components/running-sprite.scss";
 @import "components/board.scss";
 @import "components/tools.scss";
+@import "components/loader.scss";
 @import "views/gallery.scss";
 
 html, body, #react-root, #react-root > * {

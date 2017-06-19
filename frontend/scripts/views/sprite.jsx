@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Header from 'components/header';
+import Loader from 'components/loader';
 import SpriteDetails from 'components/sprite-details';
 import Utils from 'utils';
 
@@ -33,7 +34,9 @@ export default class SpriteDetailsView extends React.Component {
 
   render() {
     if (!this.state.data) {
-      return <div/>;
+      return <div className="flex-center">
+        <Loader/>
+      </div>;
     }
 
     return <div className="flex-center">

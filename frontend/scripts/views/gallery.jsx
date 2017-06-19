@@ -2,12 +2,17 @@ import React from 'react';
 import $ from 'jquery';
 
 import Header from 'components/header';
+import Loader from 'components/loader';
 import SpriteDetails from 'components/sprite-details';
 import Utils from 'utils';
 
 export default class Gallery extends React.Component {
   fetch() {
     let selected = this.state.selected;
+    if (this.state.loading || this.state.finished[selected]) {
+      return;
+    }
+
     this.setState({loading: true});
     Utils.ajax({
       method: 'GET',
@@ -17,6 +22,7 @@ export default class Gallery extends React.Component {
         offset: this.getSelected().length,
       },
       success: (data) => {
+        this.state.finished[selected] = data.length === 0;
         this.state.loading = false;
         this.state[selected] = this.state[selected].concat(data);
         this.setState(this.state);
@@ -29,8 +35,11 @@ export default class Gallery extends React.Component {
   }
 
   onScroll(e) {
-    let ratio = document.body.scrollTop / document.body.scrollHeight;
-    if (ratio >= 0.75 && !this.state.loading) {
+    let ratio = Math.max(
+      document.body.scrollTop / document.body.scrollHeight,
+      (window.scrollY || 0) / (window.scrollMaxY || 1)
+    );
+    if (ratio >= 0.75) {
       this.fetch();
     }
   }
@@ -79,6 +88,7 @@ export default class Gallery extends React.Component {
       selected: 'top_',
       top_: [],
       new_: [],
+      finished: {},
     }
   }
 
@@ -96,6 +106,7 @@ export default class Gallery extends React.Component {
           style={{height: 'auto', margin: '40px', display: 'inline-flex'}}
         />;
       })}
+      { this.state.loading && <div><Loader/></div> }
     </div>;
   }
 }

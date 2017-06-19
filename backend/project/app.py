@@ -1,6 +1,6 @@
 import base64
 
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, request
 from flask_restful import Api
 from flask_pymongo import PyMongo
 from werkzeug.utils import ImportStringError
@@ -56,7 +56,8 @@ def index():
         'index.html',
         title="Chibi Creator",
         description="Create and share your chibi sprites here!",
-        image="https://raw.githubusercontent.com/nihey/chibi/master/frontend/assets/images/creator/base/male/color-0.png",
+        image="https://raw.githubusercontent.com/nihey/chibi/master/meta.png",
+        path=request.path,
     )
 
 
@@ -69,7 +70,8 @@ def gallery():
         'index.html',
         title="Chibi Gallery",
         description="Check out a collection of chibi sprites here!",
-        image="https://raw.githubusercontent.com/nihey/chibi/master/frontend/assets/images/creator/base/male/color-0.png",
+        image="https://raw.githubusercontent.com/nihey/chibi/master/meta.png",
+        path=request.path,
     )
 
 
@@ -80,7 +82,8 @@ def sprite(id_):
     attrs = dict(
         title="Chibi Gallery",
         description="Check out a collection of chibi sprites here!",
-        image="https://raw.githubusercontent.com/nihey/chibi/master/frontend/assets/images/creator/base/male/color-0.png",
+        image="https://raw.githubusercontent.com/nihey/chibi/master/meta.png",
+        path=request.path,
     )
     sprite = Sprite.find_one({'id': id_})
     if sprite:
