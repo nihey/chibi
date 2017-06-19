@@ -121,7 +121,6 @@ class SpriteVote(BaseCollection):
             retval.append(sprite)
         return retval
 
-
     #
     # API Endpoints
     #

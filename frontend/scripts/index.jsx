@@ -15,12 +15,20 @@ window.onpopstate = function() {
 };
 
 $(document).on('click', 'a', function(e) {
-  let a = e.target
-  if (a.getAttribute('target') !== '_blank' && a.getAttribute('href')[0] === '/') {
+  let a = e.target;
+  let target = a.getAttribute('target');
+  let href = a.getAttribute('href') || '';
+  if (target !== '_blank' && href[0] === '/') {
     e.preventDefault();
     Utils.setRoute(e.target.href);
   }
 });
+
+window.onerror = function() {
+  // XXX: Could this avoid a user from being stuck in a localStorage
+  //      corruption error?
+  localStorage.clear();
+}
 
 ReactDOM.render(<Router/>, document.getElementById('react-root'));
 if (module.hot) {

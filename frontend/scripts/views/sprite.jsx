@@ -11,6 +11,7 @@ export default class SpriteDetailsView extends React.Component {
       url: '/sprite',
       data: {id: Utils.getRoute().split('/')[1]},
       success: (data) => {
+        document.title = data.name;
         this.setState({data});
       },
       error: () => Utils.setRoute('/'),

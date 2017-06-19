@@ -66,6 +66,7 @@ export default class SpriteDetails extends React.Component {
       return <div/>;
     }
 
+    let id = this.state.data.id;
     return <div className="flex-center" style={this.props.style}>
       <h1>{ this.state.data.name }</h1>
       <div className="upvote-section">
@@ -97,6 +98,33 @@ export default class SpriteDetails extends React.Component {
       <button style={{width: '96px', marginTop: '10px'}} onClick={this.onEdit.bind(this)}>
         edit
       </button>
+      <div className="social" style={{marginTop: '20px'}}>
+        <a
+          className="button"
+          target="_blank"
+          href={`http://www.facebook.com/share.php?u=${location.origin}/p/${id}&title=Chibi Center`}
+        >
+          <i className="fa fa-facebook"/>
+        </a>
+        <a
+          className="button"
+          target="_blank"
+          href={`https://twitter.com/intent/tweet?text=Check out -> ${location.origin}/p/${id}`}
+        >
+          <i className="fa fa-twitter"/>
+        </a>
+        <a className="button" href="https://github.com/nihey/chibi" target="_blank">
+          <i className="fa fa-github"/>
+        </a>
+        <a
+          className="button"
+          href={`/p/${id}`}
+          target="_blank"
+        >
+          <i className="fa fa-link"/>
+        </a>
+        <input className="pop-in" value={location.origin + '/p/' + id} disabled/>
+      </div>
     </div>;
   }
 }

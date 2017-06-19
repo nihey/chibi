@@ -19,6 +19,10 @@ html, body, #react-root, #react-root > * {
   font-family: 'Indie Flower', cursive;
 }
 
+h1 {
+  margin: 0;
+}
+
 input {
   padding: 5px;
   text-align: center;
@@ -84,4 +88,8 @@ button, .button {
     background: none !important;
     color: #16a085;
   }
+}
+
+.social {
+  text-align: center;
 }

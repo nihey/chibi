@@ -13,7 +13,7 @@ def log(*args):
 
 
 def get_ip():
-    return request.remote_addr
+    return request.headers.get('X-Real-IP', request.remote_addr)
 
 
 def json_response(dict_, code=200):

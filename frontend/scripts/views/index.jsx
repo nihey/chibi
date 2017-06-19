@@ -145,6 +145,10 @@ export default class Index extends React.Component {
    * React
    */
 
+  componentDidMount() {
+    document.title = 'Chibi Center | Create';
+  }
+
   constructor(props) {
     super(props);
     this.state = this.restore();
@@ -167,6 +171,12 @@ export default class Index extends React.Component {
       </div>
       <div className="right-sidebar">
         <a className="button" href="/gallery/top">gallery</a>
+      </div>
+      <div className="bottom-left-sidebar">
+        <p>Code by <a href="https://nihey.org" target="_blank">Nihey</a></p>
+        <p><small>
+          Sprites by <a href="https://www.famitsu.com/" target="_blank">Famitsu</a>
+        </small></p>
       </div>
       <Board>
         {Environment.base.male.map((e, i) => {

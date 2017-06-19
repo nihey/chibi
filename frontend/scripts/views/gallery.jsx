@@ -54,6 +54,7 @@ export default class Gallery extends React.Component {
    */
 
   componentDidMount() {
+    document.title = 'Gallery';
     this.fetch();
     this.onScroll = this.onScroll.bind(this);
     $(window).on('scroll', this.onScroll);

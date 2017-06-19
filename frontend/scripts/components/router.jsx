@@ -34,6 +34,10 @@ export default class Router extends React.Component {
 
   render() {
     let View = this.getView();
+    if (process.env.NODE_ENV === 'production' && window.ga) {
+      ga('create', 'UA-101243540-1', 'auto');
+      ga('send', 'pageview');
+    }
     return <div>
       <View route={this.state.route}/>
     </div>;
