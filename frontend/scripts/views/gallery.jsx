@@ -85,7 +85,7 @@ export default class Gallery extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: 'top_',
+      selected: this.getRoute() + '_',
       top_: [],
       new_: [],
       finished: {},
