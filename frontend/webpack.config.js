@@ -1,7 +1,3 @@
-var fs = require('fs');
-var gracefulFs = require('graceful-fs');
-gracefulFs.gracefulify(fs);
-
 var path = require('path');
 var webpack = require('webpack');
 
@@ -9,28 +5,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var extractHTML = new ExtractTextPlugin('index.html');
 var extractCSS = new ExtractTextPlugin('style.css');
 
-let readDir = function(dirPath) {
-  return fs.readdirSync('assets/images/creator/' + dirPath).map(f => f.split('.')[0]);
-};
-
-let parseDir = function(dirPath) {
-  files = readDir(dirPath);
-  let parsed = {};
-  files.forEach(function(file) {
-    let key = file.replace(/_back|_front/g, '');
-    parsed[key] = parsed[key] || {};
-
-    // Back part
-    if (file.match(/_back/)) {
-      parsed[key].back = file;
-      return;
-    }
-
-    parsed[key].front = file;
-  });
-
-  return Object.keys(parsed).map(k => parsed[k]);
-};
+var images = require('./utils/images');
 
 var config = {
   devServer: {
@@ -114,42 +89,7 @@ var config = {
     extractCSS,
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'default'),
-      Environment: JSON.stringify({
-        base: {
-          male: parseDir('base/male'),
-          female: parseDir('base/female'),
-        },
-        hair: {
-          male: parseDir('hair/male'),
-          female: parseDir('hair/female'),
-        },
-        'hair-front': {
-          male: parseDir('hair-front/male'),
-          female: parseDir('hair-front/female'),
-        },
-        'hair-back': {
-          male: parseDir('hair-back/male'),
-          female: parseDir('hair-back/female'),
-        },
-        body: {
-          male: parseDir('body/male'),
-          female: parseDir('body/female'),
-        },
-        armor: {
-          unissex: parseDir('armor/unissex'),
-        },
-        accessory: {
-          unissex: parseDir('accessory/unissex'),
-          male: parseDir('accessory/male'),
-          female: parseDir('accessory/female'),
-        },
-        mantle: {
-          unissex: parseDir('mantle/unissex'),
-        },
-        wing: {
-          unissex: parseDir('wing/unissex'),
-        },
-      }),
+      Environment: JSON.stringify(images),
     }),
   ],
 };

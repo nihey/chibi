@@ -1,0 +1,71 @@
+#!/usr/bin/env node
+
+var fs = require('fs');
+
+var md5 = require('md5');
+var Canvas = require('canvas');
+var Image = Canvas.Image;
+
+var images = require('../utils/images');
+
+// XXX Cheesy code, read with caution!!!
+let count = 0;
+
+function build(paths, sy=0) {
+  count += 1;
+
+  // Create a canvas
+  var canvas = new Canvas(32, 32);
+  var context = canvas.getContext('2d');
+
+  // Join all images on the correct order
+  paths.forEach(function(path) {
+    let image = new Image();
+    console.log('opening', path);
+    image.src = fs.readFileSync(__dirname + '/../assets/images/creator/' + path + '.png');
+    context.drawImage(image, 32, sy, 32, 32, 0, 0, 32, 32);
+  });
+
+  // Save the thumbnail
+  let buffer = canvas.toBuffer();
+  let thumbnailName = md5(paths.join('|')) + '.png';
+  let thumbnailPath = __dirname + '/../assets/images/thumbnails/' + thumbnailName;
+  fs.writeFileSync(thumbnailPath, buffer);
+}
+
+// Blank thumbnail
+build(['blank']);
+
+// Iterate over all bases
+Object.keys(images.base).forEach(function(baseGender) {
+  images.base[baseGender].forEach(function(base) {
+    base = base.front;
+
+    // Base thumbnails (displayed at the top of the page)
+    build(['base/' + baseGender + '/' + base]);
+
+    // Iterate over all groups
+    [
+      'hair', 'hair-front', 'hair-back', 'body', 'armor', 'accessory', 'mantle',
+      'wing',
+    ].forEach(function(group) {
+      // Iterate over all group genders (male, female and unissex)
+      Object.keys(images[group]).forEach(function(groupGender) {
+        if (groupGender === 'unissex' || groupGender === baseGender) {
+
+          // Iterate over all group elements
+          images[group][groupGender].forEach(function(e) {
+            console.info('Combining', baseGender, base, group, groupGender, e);
+            build([
+              e.back ? group + '/' + groupGender + '/' + e.back : 'blank',
+              'base/' + baseGender + '/' + base,
+              group + '/' + groupGender + '/' + e.front,
+            ], group === 'hair-back' ? 96 : 0);
+          });
+        }
+      });
+    });
+  });
+});
+
+console.info('Built', count, 'combinations');
