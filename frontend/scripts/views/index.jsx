@@ -138,13 +138,12 @@ export default class Index extends React.Component {
       {Environment[group][gender].map((e, i) => {
         let front = group + '/' + gender + '/' + e.front;
         return <Board.Card
-          key={e.back + this.state.images[0].front + e.front}
+          key={i}
           srcs={[
             e.back ? group + '/' + gender + '/' + e.back : 'blank',
             this.state.images[0].front,
             group + '/' + gender + '/' + e.front,
           ]}
-          rowIndex={rowIndex}
           onClick={this.select(index)}
           active={this.isActive(index, front)}
         />
