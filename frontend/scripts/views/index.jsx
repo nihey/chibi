@@ -6,30 +6,38 @@ import Utils from 'utils';
 import RunningSprite from 'components/running-sprite';
 import Tools from 'components/tools';
 import Board from 'components/board';
-
+import TetroLoader from 'components/tetro-loader';
 
 class Accumulator extends React.Component {
   process(props=this.props, forced) {
-    let srcs = Object.keys(props.srcs).sort();
-    let backs = srcs.map(k => require('assets/images/creator/' + props.srcs[k].back + '.png'));
-    let fronts = srcs.map(k => require('assets/images/creator/' + props.srcs[k].front + '.png'));
-    let urls = backs.concat(fronts);
+    this.setState({loading: true}, () => {
+      let srcs = Object.keys(props.srcs).sort();
+      let backs = srcs.map(k => require('assets/images/creator/' + props.srcs[k].back + '.png'));
+      let fronts = srcs.map(k => require('assets/images/creator/' + props.srcs[k].front + '.png'));
+      let urls = backs.concat(fronts);
 
-    if (!forced && Utils.equals(props.srcs, this.srcs)) {
-      return;
-    }
+      if (!forced && Utils.equals(props.srcs, this.srcs)) {
+        return this.setState({loading: false});
+      }
 
-    imageLoad(urls, (...images) => {
-      let context = this.canvas.getContext('2d');
-      context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      imageLoad(urls, (...images) => {
+        let context = this.canvas.getContext('2d');
+        context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      images.forEach((image) => {
-        context.drawImage(image, 0, 0);
+        images.forEach((image) => {
+          context.drawImage(image, 0, 0);
+        });
+
+        this.srcs = Utils.copy(props.srcs);
+        this.props.onChange(this.canvas.toDataURL());
+        this.setState({loading: false});
       });
-
-      this.srcs = Utils.copy(props.srcs);
-      this.props.onChange(this.canvas.toDataURL());
     });
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {loading: false};
   }
 
   componentDidMount() {
@@ -41,11 +49,14 @@ class Accumulator extends React.Component {
   }
 
   render() {
-    return <canvas
-      ref={v => this.canvas = v}
-      width="96"
-      height="128"
-    ></canvas>;
+    return <div className={"accumulator " + (this.state.loading ? 'loading' : '') }>
+      <canvas
+        ref={v => this.canvas = v}
+        width="96"
+        height="128"
+      ></canvas>
+      {this.state.loading && <TetroLoader/>}
+    </div>;
   }
 }
 

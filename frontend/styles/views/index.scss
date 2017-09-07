@@ -1,0 +1,14 @@
+.accumulator {
+  position: relative;
+
+  &.loading {
+    canvas {
+      opacity: 0.8;
+    }
+  }
+
+  canvas {
+    transition: opacity 0.2s ease-out;
+    opacity: 1;
+  }
+}

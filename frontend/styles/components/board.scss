@@ -7,6 +7,9 @@
   cursor: pointer;
   transition: background 0.3s ease-out;
   @extend .sprite;
+  box-sizing: content-box;
+  width: 32px;
+  height: 32px;
 
   &:hover {
     background: #2980b9;
