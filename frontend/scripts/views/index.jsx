@@ -106,7 +106,7 @@ export default class Index extends React.Component {
 
   restore() {
     let DEFAULT = 'base/male/color-0';
-    return JSON.parse(localStorage.__savedIndexState_v0 || JSON.stringify({
+    let restored = JSON.parse(localStorage.__savedIndexState_v0 || JSON.stringify({
       gender: 'male',
       images: {
         0: {
@@ -116,13 +116,15 @@ export default class Index extends React.Component {
       },
       sprite: DEFAULT,
     }));
+
+    // Some loading variables are enforced to be always the same
+    restored.loaded = 0;
+
+    return restored;
   }
 
   save() {
-    localStorage.__savedIndexState_v0 = JSON.stringify({
-      ...this.state,
-      loaded: false,
-    });
+    localStorage.__savedIndexState_v0 = JSON.stringify(this.state);
   }
 
   isActive(index, front) {
@@ -165,6 +167,26 @@ export default class Index extends React.Component {
 
   componentDidMount() {
     document.title = 'Chibi Center | Create';
+    this.loaded = this.loaded || 0;
+    this.total = this.loading || document.querySelectorAll('.card').length;
+
+    window.gEvents.on('index-load-one', () => {
+      if (this.state.loaded === 100) {
+        return;
+      }
+
+      this.loaded += 1;
+      let newLoaded = Math.min(
+        (this.loaded / this.total) * 100,
+        99
+      );
+
+      // Avoid changing this.state.loaded by reducing the number of setStates
+      // being made
+      if (newLoaded - this.state.loaded > 2) {
+        this.setState({loaded: newLoaded});
+      }
+    });
   }
 
   constructor(props) {
@@ -174,10 +196,10 @@ export default class Index extends React.Component {
 
   render() {
     return <div>
-      {this.state.loaded || <div className="index-overlay">
+      {(this.state.loaded === 100) || <div className="index-overlay">
         <TetroLoader/>
         <h1>
-          loading...
+          ({ parseInt(this.state.loaded) }%) loading...
         </h1>
       </div>}
       <div className="running-sprite-container">
@@ -190,7 +212,7 @@ export default class Index extends React.Component {
         <Accumulator
           srcs={this.state.images}
           onChange={(sprite) => this.setState({sprite})}
-          onFirstLoad={() => this.setState({loaded: true})}
+          onFirstLoad={() => this.setState({loaded: 100})}
         />
         <Tools images={this.state.images} sprite={this.state.sprite} gender={this.state.gender}/>
       </div>

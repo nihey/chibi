@@ -17,8 +17,13 @@ Board.Card = class Card extends React.Component {
     }).join('|')) + '.png');
   }
 
+  componentDidMount() {
+    this.image.onload = () => window.gEvents.trigger('index-load-one');
+  }
+
   render() {
     return <img
+      ref={(i) => this.image = i}
       src={this.getThumbnail()}
       className={"card " + (this.props.active ? 'active' : '')}
       onClick={() => this.props.onClick(this.props.srcs)}

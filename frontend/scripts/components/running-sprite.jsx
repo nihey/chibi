@@ -43,7 +43,9 @@ export default class RunningSprite extends React.Component {
 
   componentWillReceiveProps(next) {
     imageLoad(this.getUrl(next), (image) => {
-      this.sprite.image = image;
+      if (this.sprite) {
+        this.sprite.image = image;
+      }
     });
   }
 
