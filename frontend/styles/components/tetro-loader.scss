@@ -1,6 +1,6 @@
 /* Props to: https://codepen.io/imathis/pen/ZYEWrw */
 
-$w: 16px;
+$w: 64px;
 $h: $w * 1.1666666666666667;
 $xspace: $w / 2;
 $yspace: $h/4 - 1;
@@ -10,6 +10,11 @@ $speed: 0.6s;
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-$h, -$w);
+
+  &.small {
+    transform: scale(0.25);
+    top: 40%; left: 42%;
+  }
 }
 
 .tetromino {

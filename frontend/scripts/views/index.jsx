@@ -31,6 +31,11 @@ class Accumulator extends React.Component {
         this.srcs = Utils.copy(props.srcs);
         this.props.onChange(this.canvas.toDataURL());
         this.setState({loading: false});
+
+        if (!this.firstLoad) {
+          this.firstLoad = true;
+          this.props.onFirstLoad();
+        }
       });
     });
   }
@@ -55,7 +60,7 @@ class Accumulator extends React.Component {
         width="96"
         height="128"
       ></canvas>
-      {this.state.loading && <TetroLoader/>}
+      {this.state.loading && <TetroLoader className="small"/>}
     </div>;
   }
 }
@@ -114,7 +119,10 @@ export default class Index extends React.Component {
   }
 
   save() {
-    localStorage.__savedIndexState_v0 = JSON.stringify(this.state);
+    localStorage.__savedIndexState_v0 = JSON.stringify({
+      ...this.state,
+      loaded: false,
+    });
   }
 
   isActive(index, front) {
@@ -166,6 +174,12 @@ export default class Index extends React.Component {
 
   render() {
     return <div>
+      {this.state.loaded || <div className="index-overlay">
+        <TetroLoader/>
+        <h1>
+          loading...
+        </h1>
+      </div>}
       <div className="running-sprite-container">
         <RunningSprite src={this.state.sprite}/>
         <RunningSprite src={this.state.sprite} rowIndex={1}/>
@@ -176,6 +190,7 @@ export default class Index extends React.Component {
         <Accumulator
           srcs={this.state.images}
           onChange={(sprite) => this.setState({sprite})}
+          onFirstLoad={() => this.setState({loaded: true})}
         />
         <Tools images={this.state.images} sprite={this.state.sprite} gender={this.state.gender}/>
       </div>
