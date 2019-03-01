@@ -4,10 +4,10 @@ gracefulFs.gracefulify(fs);
 
 function readDir(dirPath) {
   return fs.readdirSync(__dirname + '/../assets/images/creator/' + dirPath).map(f => f.split('.')[0]);
-};
+}
 
 let parseDir = function(dirPath) {
-  files = readDir(dirPath);
+  let files = readDir(dirPath);
   let parsed = {};
   files.forEach(function(file) {
     let key = file.replace(/_back|_front/g, '');
