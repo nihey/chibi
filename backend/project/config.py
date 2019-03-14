@@ -1,9 +1,7 @@
 class Config(object):
     DEBUG = False
 
-    # We cannot use MONGO_URI yet - reason:
-    # https://github.com/dcrosta/flask-pymongo/issues/73
-    MONGO_DBNAME = 'chibi'
+    MONGO_URI = "mongodb://localhost:27017/chibi"
     MONGO_CONNECT = False
 
     DOMAIN = 'https://chibi.center'

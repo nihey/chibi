@@ -1,6 +1,8 @@
 import base64
+import os
 
-from flask import Flask, render_template, Response, request
+from flask import (Flask, render_template, Response, request,
+                   send_from_directory)
 from flask_restful import Api
 from flask_pymongo import PyMongo
 from werkzeug.utils import ImportStringError
@@ -59,6 +61,17 @@ def index():
         image="https://raw.githubusercontent.com/nihey/chibi/master/meta.png",
         path=request.path,
     )
+
+
+def serve_file(filename):
+    def decorated():
+        return send_from_directory('../../frontend/dist', filename)
+    return decorated
+
+
+filenames = [f for f in os.listdir("../frontend/dist/") if not f.endswith(".html")]
+for filename in filenames:
+    app.route("/" + filename, endpoint=filename)(serve_file(filename))
 
 
 @app.route('/gallery/new')
