@@ -1,0 +1,22 @@
+version: '3'
+
+volumes:
+    data:
+
+services:
+    mongo:
+        image: "mongo:4.0.6"
+        volumes:
+            - data:/data/db
+        deploy:
+            restart_policy:
+                condition: unless-stopped
+    chibi:
+        build: .
+        ports:
+            - 5000:80
+        depends_on:
+            - mongo
+        deploy:
+            restart_policy:
+                condition: unless-stopped

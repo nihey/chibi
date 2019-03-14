@@ -1,7 +1,7 @@
 class Config(object):
     DEBUG = False
 
-    MONGO_URI = "mongodb://localhost:27017/chibi"
+    MONGO_URI = "mongodb://mongo:27017/chibi"
     MONGO_CONNECT = False
 
     DOMAIN = 'https://chibi.center'
