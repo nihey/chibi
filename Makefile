@@ -4,9 +4,12 @@ backup:
 	ssh brinstar "cd /tmp && mongodump -d chibi -o /tmp/ && tar -cvzf chibi.tar.gz ./chibi/"
 	scp brinstar:/tmp/chibi.tar.gz ~/backups/chibi/chibi-$(DATE).tar.gz
 
-reload:
+rebuild:
 	docker-compose build chibi
 	docker-compose up --no-deps -d chibi
+
+reload:
+	docker-compose up -d
 
 deploy:
 	cd frontend && npm run production
