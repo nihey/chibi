@@ -8,11 +8,11 @@ services:
         image: "mongo:4.0.6"
         volumes:
             - data:/data/db
-        restart: unless-stopped
+        restart: always
     chibi:
         build: .
         ports:
             - 5000:80
         depends_on:
             - mongo
-        restart: unless-stopped
+        restart: always
